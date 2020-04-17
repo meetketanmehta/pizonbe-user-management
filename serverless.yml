@@ -29,6 +29,13 @@ functions:
           path: login
           method: post
           cors: true
+  getUserId:
+    handler: functions/auth-manager.getUserId
+    events:
+      - http:
+          path: getUserId
+          method: get
+          cors: true
 
   addAddress:
     handler: functions/address-manager.addAddress

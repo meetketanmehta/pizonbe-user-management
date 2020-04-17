@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const UserAuth = require('../models/UserAuth');
 const ResponseGenerator = require('../utils/response-generator');
+const jwt = require('jsonwebtoken');
 const url = process.env.DB_HOST + "/" + process.env.USER_DB;
 
 module.exports.register = async function (event, context) {
@@ -32,5 +33,15 @@ module.exports.login = async function (event, context) {
         return ResponseGenerator.generateResponse(400, {message: "Credentials didn't matched"});
     } catch (err) {
         return ResponseGenerator.generateResponse(400, {message: err.message});
+    }
+}
+
+module.exports.getUserId = async function (event, context) {
+    try {
+        const decodedUser = await jwt.verify(event.headers.authorizationToken, process.env.JWT_SECRET);
+        return ResponseGenerator.generateResponse(200, decodedUser);
+    } catch (err) {
+        console.error(err);
+        return ResponseGenerator.generateResponse(400, err.message);
     }
 }
