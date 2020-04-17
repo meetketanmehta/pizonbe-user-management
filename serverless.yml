@@ -1,0 +1,34 @@
+service: pizonbe-user-management
+
+custom:
+  secrets: ${file(secrets.json)}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${self:custom.secrets.APP_ENV_DEV}
+  environment:
+    DB_HOST: ${self:custom.secrets.DB_HOST}
+    USER_DB: ${self:custom.secrets.USER_DB}
+    USER_CRED_COLLECTION: ${self:custom.secrets.USER_CRED_COLLECTION}
+
+functions:
+  register:
+    handler: functions/auth-manager.register
+    events:
+      - http:
+          path: register
+          method: post
+          cors: true
+    environment:
+      JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
+  login:
+    handler: functions/auth-manager.login
+    events:
+      - http:
+          path: login
+          method: post
+          cors: true
+    environment:
+      JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
+
