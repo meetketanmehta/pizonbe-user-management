@@ -4,15 +4,18 @@ const mongoose = require('mongoose');
 const storeSchema = new mongoose.Schema({
     _id: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     pan: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     gstin: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     accountDetails: {
         accountNumber: {
