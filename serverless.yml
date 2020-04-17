@@ -64,3 +64,10 @@ functions:
           path: addStoreDetails
           method: post
           cors: true
+  getStoreDetails:
+    handler: functions/store-manager.getStoreDetails
+    events:
+      - http:
+          path: getStoreDetails
+          method: get
+          cors: true

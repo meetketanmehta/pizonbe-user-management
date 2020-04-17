@@ -30,3 +30,18 @@ module.exports.addStoreDetails = async function (event, context) {
         return ResponseGenerator.generateResponse(400, {message: err.message});
     }
 }
+
+module.exports.getStoreDetails = async function (event, context) {
+    try {
+        await mongoose.connect(url);
+        const decodedUser = await jwt.verify(event.headers.authorizationToken, process.env.JWT_SECRET);
+        const store = await Store.findOne({_id: decodedUser.userId});
+        if(store === null) {
+            return ResponseGenerator.generateResponse(400, {message: "No details found"});
+        }
+        return ResponseGenerator.generateResponse(200, store);
+    } catch(err) {
+        console.log(err);
+        return ResponseGenerator.generateResponse(400, {message: err.message});
+    }
+}
