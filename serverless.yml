@@ -11,6 +11,8 @@ provider:
     DB_HOST: ${self:custom.secrets.DB_HOST}
     USER_DB: ${self:custom.secrets.USER_DB}
     USER_CRED_COLLECTION: ${self:custom.secrets.USER_CRED_COLLECTION}
+    USER_ADDRESS_COLLECTION: ${self:custom.secrets.USER_ADDRESS_COLLECTION}
+    JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
 
 functions:
   register:
@@ -20,8 +22,6 @@ functions:
           path: register
           method: post
           cors: true
-    environment:
-      JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
   login:
     handler: functions/auth-manager.login
     events:
@@ -29,6 +29,12 @@ functions:
           path: login
           method: post
           cors: true
-    environment:
-      JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
+
+  addAddress:
+    handler: functions/address-manager.addAddress
+    events:
+      - http:
+          path: addAddress
+          method: post
+          cors: true
 

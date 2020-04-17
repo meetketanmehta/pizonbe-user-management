@@ -34,7 +34,7 @@ userAuthSchema.methods.matchPassword = async function (userDetails) {
 
 userAuthSchema.methods.generateToken = async function () {
     const payload = {
-        id: this._id,
+        userId: this._id,
         userType: this.userType
     }
     return await jwt.sign(payload, process.env.JWT_SECRET);
