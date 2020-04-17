@@ -13,6 +13,7 @@ const userAuthSchema = new mongoose.Schema({
     },
     mobile: {
         type: Number,
+        unique: true,
         min : 1000000000,
         max : 9999999999
     },
