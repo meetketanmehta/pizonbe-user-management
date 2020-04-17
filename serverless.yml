@@ -12,6 +12,7 @@ provider:
     USER_DB: ${self:custom.secrets.USER_DB}
     USER_CRED_COLLECTION: ${self:custom.secrets.USER_CRED_COLLECTION}
     USER_ADDRESS_COLLECTION: ${self:custom.secrets.USER_ADDRESS_COLLECTION}
+    STORE_DETAILS_COLLECTION: ${self:custom.secrets.STORE_DETAILS_COLLECTION}
     JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
 
 functions:
@@ -54,4 +55,12 @@ functions:
       - http:
           path: getAddress
           method: get
+          cors: true
+
+  addStoreDetails:
+    handler: functions/store-manager.addStoreDetails
+    events:
+      - http:
+          path: addStoreDetails
+          method: post
           cors: true
