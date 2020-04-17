@@ -37,4 +37,14 @@ functions:
           path: addAddress
           method: post
           cors: true
-
+  getAddress:
+    handler: functions/address-manager.getAddress
+    events:
+      - http:
+          path: getAddress/{addId}
+          method: get
+          cors: true
+      - http:
+          path: getAddress
+          method: get
+          cors: true

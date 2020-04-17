@@ -11,19 +11,42 @@ module.exports.addAddress = async function(event, context) {
     try {
         await mongoose.connect(url);
         const requestBody = JSON.parse(event.body);
-        const address = new Address(requestBody);
         const decodedUser = await jwt.verify(event.headers.authorizationToken, process.env.JWT_SECRET);
-        if (address.userId !== decodedUser.userId) {
-            return ResponseGenerator.generateResponse(401, {message: "Authorization Error"});
+        if(decodedUser.userType !== 'customer') {
+            const address = await Address.findOne({userId: decodedUser.userId});
+            if(address !== null) {
+                return ResponseGenerator.generateResponse(400, "Address already present in database");
+            }
         }
-        const userAddresses = await Address.find({userId: address.userId});
-        if (userAddresses !== null && address.userType !== 'customer') {
-            return ResponseGenerator.generateResponse(400, {message: "Address already added in" +
-                    " database, Please use modify address option"});
-        }
+        requestBody['userId'] = decodedUser.userId;
+        requestBody['userType'] = decodedUser.userType;
+        const address = new Address(requestBody);
         await address.save();
         return ResponseGenerator.generateResponse(200, {message: "Address added successfully"});
     } catch (err) {
-        return ResponseGenerator.generateResponse(500, {message: err.message});
+        return ResponseGenerator.generateResponse(400, {message: err.message});
+    }
+}
+
+module.exports.getAddress = async function (event, context) {
+    try {
+        await mongoose.connect(url);
+        var addId = null;
+        if(event.pathParameters) {
+            addId = event.pathParameters.addId;
+        }
+        //const requestBody = JSON.parse(event.body);
+        const decodedUser = await jwt.verify(event.headers.authorizationToken, process.env.JWT_SECRET);
+        const queryObj = {
+            userId: decodedUser.userId
+        };
+        if(addId !== null) {
+            queryObj["_id"] = addId;
+        }
+        const address = await Address.find(queryObj);
+        return ResponseGenerator.generateResponse(200, {address});
+    } catch (err) {
+        console.error(err);
+        return ResponseGenerator.generateResponse(400, {message: err.message});
     }
 }
