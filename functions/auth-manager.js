@@ -20,7 +20,7 @@ module.exports.register = async function (event, context) {
             let errorPaths = Object.keys(err.errors);
             errorPaths.forEach((errorPath, index, arr) => {arr[index] = capitalCase(errorPath)});
             const uniqueErrorIn = errorPaths.join(' and ');
-            const responseString = uniqueErrorIn + " already registered, Please Login";
+            const responseString = uniqueErrorIn + " already registered";
             return ResponseGenerator.generateResponse(400, {message: responseString});
         }
         return ResponseGenerator.generateResponse(500, {message: "Internal server error, Please try again later"});
