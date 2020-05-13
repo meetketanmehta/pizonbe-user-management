@@ -11,7 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^4.0.1",
+    "case-anything": "^1.1.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.9"
-  }
+    "mongoose": "^5.9.9",
+    "mongoose-unique-validator": "^2.0.3"
+  },
+  "devDependencies": {}
 }

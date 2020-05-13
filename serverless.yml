@@ -1,3 +1,5 @@
+org: pizon
+app: user-management
 service: pizonbe-user-management
 
 custom:

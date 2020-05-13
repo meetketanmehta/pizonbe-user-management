@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const mongooseUniqueValidator = require('mongoose-unique-validator');
 //const bcrypt = require('bcrypt');
 
 const userAuthSchema = new mongoose.Schema({
@@ -11,13 +12,12 @@ const userAuthSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    mobile: {
+    mobileNumber: {
         type: Number,
-        unique: true,
-        min : 1000000000,
-        max : 9999999999
+        required: true,
+        unique: true
     },
-    email: {
+    emailId: {
         type: String,
         required: true,
         unique: true
@@ -50,6 +50,8 @@ userAuthSchema.methods.generateToken = async function () {
 //         next();
 //     });
 // });
+
+userAuthSchema.plugin(mongooseUniqueValidator);
 
 var UserAuth = mongoose.model('UserAuth', userAuthSchema, process.env.USER_CRED_COLLECTION);
 
