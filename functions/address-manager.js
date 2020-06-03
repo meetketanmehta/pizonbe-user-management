@@ -44,8 +44,12 @@ module.exports.getAddress = async function (event, context) {
             userId: decodedUser.userId
         };
         await connect;
-        const address = await Address.find(queryObj);
-        return ResponseGenerator.generateResponse(200, {address});
+        let addresses = await Address.find(queryObj).lean();
+        addresses.forEach((address) => {
+            address['coordinates'] = address.coord.coordinates;
+            delete address['coord'];
+        })
+        return ResponseGenerator.generateResponse(200, addresses);
     } catch (err) {
         console.error(err);
         if(err.name === "TokenExpiredError" || err.name === "JsonWebTokenError" || err.name === "NotBeforeError") {
