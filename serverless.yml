@@ -51,11 +51,7 @@ functions:
     handler: functions/address-manager.getAddress
     events:
       - http:
-          path: getAddress/{addId}
-          method: get
-          cors: true
-      - http:
-          path: getAddress
+          path: address
           method: get
           cors: true
 

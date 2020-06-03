@@ -38,23 +38,19 @@ module.exports.addAddress = async function(event, context) {
 
 module.exports.getAddress = async function (event, context) {
     try {
-        await mongoose.connect(url);
-        var addId = null;
-        if(event.pathParameters) {
-            addId = event.pathParameters.addId;
-        }
-        //const requestBody = JSON.parse(event.body);
+        const connect =  mongoose.connect(url);
         const decodedUser = await jwt.verify(event.headers.authorizationToken, process.env.JWT_SECRET);
         const queryObj = {
             userId: decodedUser.userId
         };
-        if(addId !== null) {
-            queryObj["_id"] = addId;
-        }
+        await connect;
         const address = await Address.find(queryObj);
         return ResponseGenerator.generateResponse(200, {address});
     } catch (err) {
         console.error(err);
-        return ResponseGenerator.generateResponse(400, {message: err.message});
+        if(err.name === "TokenExpiredError" || err.name === "JsonWebTokenError" || err.name === "NotBeforeError") {
+            return ResponseGenerator.generateResponse(400, err.message);
+        }
+        return ResponseGenerator.internalErrorResponse();
     }
 }
