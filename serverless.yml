@@ -44,7 +44,7 @@ functions:
     handler: functions/address-manager.addAddress
     events:
       - http:
-          path: addAddress
+          path: address
           method: post
           cors: true
   getAddress:
